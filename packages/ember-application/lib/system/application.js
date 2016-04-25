@@ -13,11 +13,7 @@ import Namespace, {
 import { runLoadHooks } from 'ember-runtime/system/lazy_load';
 import run from 'ember-metal/run_loop';
 import Controller from 'ember-runtime/controllers/controller';
-import HTMLBarsDOMHelper from 'ember-htmlbars/system/dom-helper';
-import * as HTMLBarsRenderer from 'ember-metal-views';
-import topLevelViewTemplate from 'ember-htmlbars/templates/top-level-view';
-import { OutletView as HTMLBarsOutletView } from 'ember-routing-views/views/outlet';
-import EmberView from 'ember-views/views/view';
+import EmberView from 'ember-views/views/view'; // for Ember.View.views
 import EventDispatcher from 'ember-views/system/event_dispatcher';
 import jQuery from 'ember-views/system/jquery';
 import Route from 'ember-routing/system/route';
@@ -28,9 +24,9 @@ import AutoLocation from 'ember-routing/location/auto_location';
 import NoneLocation from 'ember-routing/location/none_location';
 import BucketCache from 'ember-routing/system/cache';
 import ApplicationInstance from 'ember-application/system/application-instance';
-import TextField from 'ember-views/views/text_field';
-import TextArea from 'ember-views/views/text_area';
-import Checkbox from 'ember-views/views/checkbox';
+import TextField from 'ember-templates/components/text_field';
+import TextArea from 'ember-templates/components/text_area';
+import Checkbox from 'ember-templates/components/checkbox';
 import LinkToComponent from 'ember-routing-views/components/link-to';
 import RoutingService from 'ember-routing/services/routing';
 import ContainerDebugAdapter from 'ember-extension-support/container_debug_adapter';
@@ -1129,7 +1125,7 @@ function glimmerSetupRegistry(registry) {
   let OutletView = require('ember-glimmer/ember-routing-view').OutletView;
   registry.register('view:-outlet', OutletView);
 
-  let { InteractiveRenderer, InertRenderer } = require('ember-glimmer/ember-metal-views');
+  let { InteractiveRenderer, InertRenderer } = require('ember-glimmer/renderer');
   registry.register('renderer:-dom', InteractiveRenderer);
   registry.register('renderer:-inert', InertRenderer);
 
@@ -1153,17 +1149,21 @@ function htmlbarsSetupRegistry(registry) {
   commonSetupRegistry(registry);
 
   registry.optionsForType('template', { instantiate: false });
-  registry.register('view:-outlet', HTMLBarsOutletView);
 
-  let { InteractiveRenderer, InertRenderer } = HTMLBarsRenderer;
+  let OutletView = require('ember-routing-views/views/outlet').OutletView;
+  registry.register('view:-outlet', OutletView);
+
+  let { InteractiveRenderer, InertRenderer } = require('ember-htmlbars/renderer');
   registry.register('renderer:-dom', InteractiveRenderer);
   registry.register('renderer:-inert', InertRenderer);
 
+  let DOMHelper = require('ember-htmlbars/system/dom-helper').default;
   registry.register('service:-dom-helper', {
-    create({ document }) { return new HTMLBarsDOMHelper(document); }
+    create({ document }) { return new DOMHelper(document); }
   });
 
-  registry.register('template:-outlet', topLevelViewTemplate);
+  let outletTemplate = require('ember-htmlbars/templates/top-level-view').default;
+  registry.register('template:-outlet', outletTemplate);
   registry.register('view:toplevel', EmberView.extend());
 }
 

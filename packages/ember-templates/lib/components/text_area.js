@@ -1,8 +1,8 @@
 /**
 @module ember
-@submodule ember-views
+@submodule ember-templates
 */
-import Component from 'ember-views/components/component';
+import Component from 'ember-templates/component';
 import TextSupport from 'ember-views/mixins/text_support';
 
 /**

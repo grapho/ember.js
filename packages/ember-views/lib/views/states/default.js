@@ -38,7 +38,9 @@ export default {
     return true; // continue event propagation
   },
 
-  cleanup() { } ,
+  cleanup() {
+  },
+
   destroyElement() { },
 
   rerender(view) {

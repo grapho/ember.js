@@ -5,8 +5,10 @@ import { internal, render } from 'htmlbars-runtime';
 import getValue from 'ember-htmlbars/hooks/get-value';
 import { isStream } from 'ember-metal/streams/utils';
 
-export default function buildComponentTemplate({ component, tagName, layout, isAngleBracket, isComponentElement, outerAttrs }, attrs, content) {
+export default function buildComponentTemplate({ component, tagName, layout, isComponentElement, outerAttrs }, attrs, content) {
   var blockToRender, meta;
+
+  let isAngleBracket = false;
 
   if (component === undefined) {
     component = null;

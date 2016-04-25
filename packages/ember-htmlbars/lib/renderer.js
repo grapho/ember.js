@@ -3,9 +3,10 @@ import { get } from 'ember-metal/property_get';
 import { set } from 'ember-metal/property_set';
 import assign from 'ember-metal/assign';
 import setProperties from 'ember-metal/set_properties';
-import buildComponentTemplate from 'ember-views/system/build-component-template';
+import buildComponentTemplate from 'ember-htmlbars/system/build-component-template';
 import { environment } from 'ember-environment';
 import { internal } from 'htmlbars-runtime';
+import { assert } from 'ember-metal/debug';
 
 export function Renderer(domHelper, { destinedForDOM } = {}) {
   this._dom = domHelper;
@@ -277,6 +278,19 @@ Renderer.prototype.willDestroyElement = function (view) {
 
   if (view._transitionTo) {
     view._transitionTo('destroying');
+  }
+};
+
+Renderer.prototype.cleanup = function (view) {
+  // If the destroyingSubtreeForView property is not set but we have an
+  // associated render node, it means this view is being destroyed from user
+  // code and not via a change in the templating layer (like an {{if}}
+  // becoming falsy, for example).  In this case, it is our responsibility to
+  // make sure that any render nodes created as part of the rendering process
+  // are cleaned up.
+  if (!view.ownerView._destroyingSubtreeForView && view._renderNode) {
+    assert('BUG: Render node exists without concomitant env.', view.ownerView.env);
+    internal.clearMorph(view._renderNode, view.ownerView.env, true);
   }
 };
 

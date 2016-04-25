@@ -1,5 +1,5 @@
 import { set } from 'ember-metal/property_set';
-import TextArea from 'ember-views/views/text_area';
+import TextArea from 'ember-templates/components/text_area';
 import { RenderingTest, moduleFor } from '../../utils/test-case';
 
 class TextAreaRenderingTest extends RenderingTest {

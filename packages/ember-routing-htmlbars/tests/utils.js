@@ -18,7 +18,7 @@ import EmberObject from 'ember-runtime/system/object';
 import Registry from 'container/registry';
 import RegistryProxy from 'ember-runtime/mixins/registry_proxy';
 import ContainerProxy from 'ember-runtime/mixins/container_proxy';
-import { get as getTemplate, has as hasTemplate } from 'ember-htmlbars/template_registry';
+import { get as getTemplate, has as hasTemplate } from 'ember-templates/template_registry';
 
 function resolverFor(namespace) {
   return {

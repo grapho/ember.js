@@ -1,10 +1,10 @@
 import { get } from 'ember-metal/property_get';
 import { set } from 'ember-metal/property_set';
-import EmberComponent from 'ember-views/components/component';
+import EmberComponent from 'ember-templates/component';
 
 /**
 @module ember
-@submodule ember-views
+@submodule ember-templates
 */
 
 /**

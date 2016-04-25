@@ -4,7 +4,7 @@ import run from 'ember-metal/run_loop';
 import EmberObject from 'ember-runtime/system/object';
 import RSVP from 'ember-runtime/ext/rsvp';
 import EmberView from 'ember-views/views/view';
-import Checkbox from 'ember-views/views/checkbox';
+import Checkbox from 'ember-templates/components/checkbox';
 import jQuery from 'ember-views/system/jquery';
 
 import Test from 'ember-testing/test';
@@ -18,7 +18,7 @@ import compile from 'ember-template-compiler/system/compile';
 
 import { registerKeyword, resetKeyword } from 'ember-htmlbars/tests/utils';
 import viewKeyword from 'ember-htmlbars/keywords/view';
-import { setTemplates, set as setTemplate } from 'ember-htmlbars/template_registry';
+import { setTemplates, set as setTemplate } from 'ember-templates/template_registry';
 import {
   pendingRequests,
   incrementPendingRequests,

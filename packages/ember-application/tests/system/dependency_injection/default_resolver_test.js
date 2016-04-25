@@ -4,18 +4,18 @@ import { getDebugFunction, setDebugFunction } from 'ember-metal/debug';
 import run from 'ember-metal/run_loop';
 import Controller from 'ember-runtime/controllers/controller';
 import Route from 'ember-routing/system/route';
-import Component from 'ember-views/components/component';
+import Component from 'ember-templates/component';
 import View from 'ember-views/views/view';
 import Service from 'ember-runtime/system/service';
 import EmberObject from 'ember-runtime/system/object';
 import Namespace from 'ember-runtime/system/namespace';
 import Application from 'ember-application/system/application';
-import Helper, { helper as makeHelper } from 'ember-htmlbars/helper';
+import Helper, { helper as makeHelper } from 'ember-templates/helper';
 import makeHTMLBarsBoundHelper from 'ember-htmlbars/system/make_bound_helper';
 import {
   registerHelper
 } from 'ember-htmlbars/helpers';
-import { setTemplates, set as setTemplate } from 'ember-htmlbars/template_registry';
+import { setTemplates, set as setTemplate } from 'ember-templates/template_registry';
 
 var registry, locator, application, originalLookup, originalInfo;
 

@@ -1,6 +1,6 @@
 import { StatementSyntax, ValueReference } from 'glimmer-runtime';
 import { AttributeBindingReference, RootReference, applyClassNameBinding } from '../utils/references';
-import { DIRTY_TAG } from '../ember-views/component';
+import { DIRTY_TAG } from '../component';
 import EmptyObject from 'ember-metal/empty_object';
 
 export class CurlyComponentSyntax extends StatementSyntax {
@@ -148,7 +148,7 @@ class CurlyComponentManager {
 const MANAGER = new CurlyComponentManager();
 
 import { ComponentDefinition } from 'glimmer-runtime';
-import Component from '../ember-views/component';
+import Component from '../component';
 
 function tagName(vm) {
   let { tagName } = vm.dynamicScope().view;

@@ -319,7 +319,7 @@ import { get } from 'ember-metal/property_get';
 import { computed } from 'ember-metal/computed';
 import { deprecatingAlias } from 'ember-runtime/computed/computed_macros';
 import { isSimpleClick } from 'ember-views/system/utils';
-import EmberComponent from 'ember-views/components/component';
+import EmberComponent from 'ember-templates/component';
 import inject from 'ember-runtime/inject';
 import 'ember-runtime/system/service'; // creates inject.service
 import ControllerMixin from 'ember-runtime/mixins/controller';
@@ -331,7 +331,6 @@ let layout = htmlbarsTemplate;
 if (isEnabled('ember-glimmer')) {
   layout = require('ember-glimmer/templates/link-to').default;
 }
-
 
 /**
   `Ember.LinkComponent` renders an element whose `click` event triggers a

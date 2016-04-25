@@ -1,4 +1,4 @@
-import { RootReference } from '../utils/references';
+import { RootReference } from './utils/references';
 import run from 'ember-metal/run_loop';
 import { CURRENT_TAG } from 'glimmer-reference';
 
@@ -46,6 +46,8 @@ class Scheduler {
       }
     }
   }
+
+  cleanup(view) {}
 
   _maybeUpdate(lastTagValue) {
     if (CURRENT_TAG.validate(lastTagValue)) { return; }

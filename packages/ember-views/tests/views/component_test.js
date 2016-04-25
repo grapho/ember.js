@@ -8,7 +8,7 @@ import Application from 'ember-application/system/application';
 import ApplicationInstance from 'ember-application/system/application-instance';
 
 import EmberView from 'ember-views/views/view';
-import Component from 'ember-views/components/component';
+import Component from 'ember-htmlbars/component';
 
 import { MUTABLE_CELL } from 'ember-views/compat/attrs-proxy';
 import buildOwner from 'container/tests/test-helpers/build-owner';

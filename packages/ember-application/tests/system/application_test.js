@@ -16,7 +16,7 @@ import jQuery from 'ember-views/system/jquery';
 import compile from 'ember-template-compiler/system/compile';
 import { _loaded } from 'ember-runtime/system/lazy_load';
 import { getDebugFunction, setDebugFunction } from 'ember-metal/debug';
-import { setTemplates, set as setTemplate } from 'ember-htmlbars/template_registry';
+import { setTemplates, set as setTemplate } from 'ember-templates/template_registry';
 
 var trim = jQuery.trim;
 

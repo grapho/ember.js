@@ -17,6 +17,9 @@ assign(destroying, {
   },
   destroyElement() {
     throw new EmberError('You can\'t call destroyElement on a view being destroyed');
+  },
+  cleanup(view) {
+    view.renderer.cleanup(view);
   }
 });
 

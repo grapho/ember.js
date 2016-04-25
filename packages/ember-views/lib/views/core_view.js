@@ -1,4 +1,3 @@
-import { assert } from 'ember-metal/debug';
 import { get } from 'ember-metal/property_get';
 
 import EmberObject from 'ember-runtime/system/object';
@@ -6,17 +5,10 @@ import Evented from 'ember-runtime/mixins/evented';
 import ActionHandler, { deprecateUnderscoreActions } from 'ember-runtime/mixins/action_handler';
 import { typeOf } from 'ember-runtime/utils';
 
-import { InteractiveRenderer } from 'ember-metal-views';
 import { cloneStates, states } from 'ember-views/views/states';
-import { internal } from 'htmlbars-runtime';
-import require from 'require';
 
-// Normally, the renderer is injected by the container when the view is looked
-// up. However, if someone creates a view without looking it up via the
-// container (e.g. `Ember.View.create().append()`) then we create a fallback
-// DOM renderer that is shared. In general, this path should be avoided since
-// views created this way cannot run in a node environment.
-var renderer;
+import require from 'require';
+import isEnabled from 'ember-metal/features';
 
 /**
   `Ember.CoreView` is an abstract class that exists to give view-like behavior
@@ -48,9 +40,7 @@ const CoreView = EmberObject.extend(Evented, ActionHandler, {
     // Fallback for legacy cases where the view was created directly
     // via `create()` instead of going through the container.
     if (!this.renderer) {
-      var DOMHelper = domHelper();
-      renderer = renderer || InteractiveRenderer.create({ dom: new DOMHelper() });
-      this.renderer = renderer;
+      this.renderer = defaultRenderer();
     }
 
     this._destroyingSubtreeForView = null;
@@ -106,17 +96,6 @@ const CoreView = EmberObject.extend(Evented, ActionHandler, {
 
     this._currentState.cleanup(this);
 
-    // If the destroyingSubtreeForView property is not set but we have an
-    // associated render node, it means this view is being destroyed from user
-    // code and not via a change in the templating layer (like an {{if}}
-    // becoming falsy, for example).  In this case, it is our responsibility to
-    // make sure that any render nodes created as part of the rendering process
-    // are cleaned up.
-    if (!this.ownerView._destroyingSubtreeForView && this._renderNode) {
-      assert('BUG: Render node exists without concomitant env.', this.ownerView.env);
-      internal.clearMorph(this._renderNode, this.ownerView.env, true);
-    }
-
     return this;
   }
 });
@@ -127,9 +106,26 @@ CoreView.reopenClass({
   isViewFactory: true
 });
 
-var _domHelper;
-function domHelper() {
-  return _domHelper = _domHelper || require('ember-htmlbars/system/dom-helper').default;
+// Normally, the renderer is injected by the container when the view is looked
+// up. However, if someone creates a view without looking it up via the
+// container (e.g. `Ember.View.create().append()`) then we create a fallback
+// DOM renderer that is shared. In general, this path should be avoided since
+// views created this way cannot run in a node environment.
+let renderer;
+function defaultRenderer() {
+  if (!renderer) {
+    let DOMHelper;
+    let Renderer;
+    if (isEnabled('ember-glimmer')) {
+      DOMHelper = require('ember-glimmer/dom').default;
+      Renderer = require('ember-glimmer/renderer').InteractiveRenderer;
+    } else {
+      DOMHelper = require('ember-htmlbars/system/dom-helper').default;
+      Renderer = require('ember-htmlbars/renderer').InteractiveRenderer;
+    }
+    renderer = new Renderer.create({ dom: new DOMHelper() });
+  }
+  return renderer;
 }
 
 export default CoreView;
