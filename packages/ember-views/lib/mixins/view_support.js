@@ -1,14 +1,11 @@
 import { assert, deprecate } from 'ember-metal/debug';
-import EmberError from 'ember-metal/error';
 import { get } from 'ember-metal/property_get';
 import run from 'ember-metal/run_loop';
 import { addObserver, removeObserver } from 'ember-metal/observer';
 import { guidFor } from 'ember-metal/utils';
-import { computed } from 'ember-metal/computed';
 import { Mixin } from 'ember-metal/mixin';
 import { POST_INIT } from 'ember-runtime/system/core_object';
 import symbol from 'ember-metal/symbol';
-import { getOwner } from 'container/owner';
 
 const INIT_WAS_CALLED = symbol('INIT_WAS_CALLED');
 

@@ -2,12 +2,11 @@
 @module ember
 @submodule ember-routing-views
 */
-
 import View from 'ember-views/views/view';
 import topLevelViewTemplate from 'ember-htmlbars/templates/top-level-view';
 
 export var CoreOutletView = View.extend({
-  defaultTemplate: topLevelViewTemplate,
+  template: topLevelViewTemplate,
 
   init() {
     this._super();

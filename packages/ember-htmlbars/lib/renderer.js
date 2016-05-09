@@ -254,7 +254,7 @@ class ViewBounds {
 
 Renderer.prototype.bounds = function (view) {
   return new ViewBounds(view);
-}
+};
 
 Renderer.prototype.remove = function (view, shouldDestroy) {
   this.willDestroyElement(view);
