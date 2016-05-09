@@ -40,7 +40,6 @@ Object.defineProperty(Ember, 'Helper', {
   enumerable: true
 });
 
-
 let Checkbox;
 Object.defineProperty(Ember, 'Checkbox', {
   get: () => {
