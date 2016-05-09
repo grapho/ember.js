@@ -10,6 +10,10 @@ import { cloneStates, states } from 'ember-views/views/states';
 import require from 'require';
 import isEnabled from 'ember-metal/features';
 
+import Registry, {
+  privatize as P
+} from 'container/registry';
+
 /**
   `Ember.CoreView` is an abstract class that exists to give view-like behavior
   to both Ember's main view class `Ember.View` and other classes that don't need
@@ -106,6 +110,28 @@ CoreView.reopenClass({
   isViewFactory: true
 });
 
+function setupGlimmer(registry) {
+  let Environment = require('ember-glimmer/environment').default;
+  registry.register('service:-glimmer-environment', Environment);
+  registry.injection('service:-glimmer-environment', 'dom', 'service:-dom-helper');
+  registry.injection('renderer', 'env', 'service:-glimmer-environment');
+  let OutletView = require('ember-glimmer/ember-routing-view').OutletView;
+  registry.register('view:-outlet', OutletView);
+  let { InteractiveRenderer } = require('ember-glimmer/renderer');
+  registry.register('renderer:-dom', InteractiveRenderer);
+  let DOMHelper = require('ember-glimmer/dom').default;
+  registry.register('service:-dom-helper', {
+    create() { return new DOMHelper(document); }
+  });
+  let glimmerOutletTemplate = require('ember-glimmer/templates/outlet').default;
+  let glimmerComponentTemplate = require('ember-glimmer/templates/component').default;
+  registry.register(P`template:components/-default`, glimmerComponentTemplate);
+  registry.register('template:-outlet', glimmerOutletTemplate);
+  registry.injection('view:-outlet', 'template', 'template:-outlet');
+  registry.injection('template', 'env', 'service:-glimmer-environment');
+  registry.optionsForType('helper', { instantiate: false });
+}
+
 // Normally, the renderer is injected by the container when the view is looked
 // up. However, if someone creates a view without looking it up via the
 // container (e.g. `Ember.View.create().append()`) then we create a fallback
@@ -115,15 +141,19 @@ let renderer;
 function defaultRenderer() {
   if (!renderer) {
     let DOMHelper;
-    let Renderer;
+    let dom;
+    let InteractiveRenderer;
     if (isEnabled('ember-glimmer')) {
-      DOMHelper = require('ember-glimmer/dom').default;
-      Renderer = require('ember-glimmer/renderer').InteractiveRenderer;
+      let registry = new Registry();
+      setupGlimmer(registry);
+      let container = registry.container();
+      renderer = container.lookup('renderer:-dom');
     } else {
       DOMHelper = require('ember-htmlbars/system/dom-helper').default;
-      Renderer = require('ember-htmlbars/renderer').InteractiveRenderer;
+      dom = new DOMHelper();
+      InteractiveRenderer = require('ember-htmlbars/renderer').InteractiveRenderer;
+      renderer = InteractiveRenderer.create({ dom });
     }
-    renderer = new Renderer.create({ dom: new DOMHelper() });
   }
   return renderer;
 }

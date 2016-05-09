@@ -1,6 +1,7 @@
 import { RootReference } from './utils/references';
 import run from 'ember-metal/run_loop';
 import { CURRENT_TAG } from 'glimmer-reference';
+import defaultTemplate from './templates/view-default';
 
 class DynamicScope {
   constructor({ view, controller, outletState, isTopLevel }) {
@@ -84,7 +85,7 @@ class Renderer {
     });
 
     env.begin();
-    let result = view.template.asEntryPoint().render(self, env, { appendTo: target, dynamicScope });
+    let result = (view.template || view.defaultTemplate || defaultTemplate.create()).asEntryPoint().render(self, env, { appendTo: target, dynamicScope });
     env.commit();
 
     this._scheduler.registerView(view);
@@ -98,7 +99,9 @@ class Renderer {
     let dynamicScope = new DynamicScope({ view });
 
     env.begin();
-    let result = view.template.asEntryPoint().render(self, env, { appendTo: target, dynamicScope });
+    let template = (view.template || view.defaultTemplate || defaultTemplate.create());
+    template.env = template.env || env;
+    let result = template.asEntryPoint().render(self, env, { appendTo: target, dynamicScope });
     env.commit();
 
     this._scheduler.registerView(view);
@@ -112,6 +115,10 @@ class Renderer {
 
   rerender(view) {
     (view['_renderResult'] || this._root['_renderResult']).rerender();
+  }
+
+  bounds(view) {
+    return view['_renderResult'].bounds;
   }
 
   remove(view) {

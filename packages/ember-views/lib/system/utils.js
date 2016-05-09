@@ -16,9 +16,10 @@ export function isSimpleClick(event) {
   @param {Ember.View} view
 */
 function getViewRange(view) {
-  var range = document.createRange();
-  range.setStartBefore(view._renderNode.firstNode);
-  range.setEndAfter(view._renderNode.lastNode);
+  let range = document.createRange();
+  let bounds = view.renderer.bounds(view);
+  range.setStartBefore(bounds.firstNode());
+  range.setEndAfter(bounds.lastNode());
   return range;
 }
 

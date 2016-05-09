@@ -33,32 +33,6 @@ export default Mixin.create({
   //
 
   /**
-    The name of the template to lookup if no template is provided.
-
-    By default `Ember.View` will lookup a template with this name in
-    `Ember.TEMPLATES` (a shared global object).
-
-    @property templateName
-    @type String
-    @default null
-    @private
-  */
-  templateName: null,
-
-  /**
-    The name of the layout to lookup if no layout is provided.
-
-    By default `Ember.View` will lookup a template with this name in
-    `Ember.TEMPLATES` (a shared global object).
-
-    @property layoutName
-    @type String
-    @default null
-    @private
-  */
-  layoutName: null,
-
-  /**
     The template used to render the view. This should be a function that
     accepts an optional context parameter and returns a string of HTML that
     will be inserted into the DOM relative to its parent view.
@@ -70,18 +44,6 @@ export default Mixin.create({
     @type Function
     @private
   */
-  template: computed({
-    get() {
-      var templateName = get(this, 'templateName');
-      var template = this.templateForName(templateName, 'template');
-      assert('You specified the templateName ' + templateName + ' for ' + this + ', but it did not exist.', !templateName || !!template);
-      return template || get(this, 'defaultTemplate');
-    },
-    set(key, value) {
-      if (value !== undefined) { return value; }
-      return get(this, key);
-    }
-  }),
 
   /**
     A view may contain a layout. A layout is a regular template but
@@ -98,35 +60,35 @@ export default Mixin.create({
     @type Function
     @private
   */
-  layout: computed({
-    get(key) {
-      var layoutName = get(this, 'layoutName');
-      var layout = this.templateForName(layoutName, 'layout');
+  // layout: computed({
+  //   get(key) {
+  //     var layoutName = get(this, 'layoutName');
+  //     var layout = this.templateForName(layoutName, 'layout');
 
-      assert('You specified the layoutName ' + layoutName + ' for ' + this + ', but it did not exist.', !layoutName || !!layout);
+  //     assert('You specified the layoutName ' + layoutName + ' for ' + this + ', but it did not exist.', !layoutName || !!layout);
 
-      return layout || get(this, 'defaultLayout');
-    },
+  //     return layout || get(this, 'defaultLayout');
+  //   },
 
-    set(key, value) {
-      return value;
-    }
-  }),
+  //   set(key, value) {
+  //     return value;
+  //   }
+  // }),
 
-  templateForName(name, type) {
-    if (!name) { return; }
-    assert('templateNames are not allowed to contain periods: ' + name, name.indexOf('.') === -1);
+  // templateForName(name, type) {
+  //   if (!name) { return; }
+  //   assert('templateNames are not allowed to contain periods: ' + name, name.indexOf('.') === -1);
 
-    let owner = getOwner(this);
+  //   let owner = getOwner(this);
 
-    if (!owner) {
-      throw new EmberError('Container was not found when looking up a views template. ' +
-                 'This is most likely due to manually instantiating an Ember.View. ' +
-                 'See: http://git.io/EKPpnA');
-    }
+  //   if (!owner) {
+  //     throw new EmberError('Container was not found when looking up a views template. ' +
+  //                'This is most likely due to manually instantiating an Ember.View. ' +
+  //                'See: http://git.io/EKPpnA');
+  //   }
 
-    return owner.lookup('template:' + name);
-  },
+  //   return owner.lookup('template:' + name);
+  // },
 
   /**
     Return the nearest ancestor that is an instance of the provided

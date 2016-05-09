@@ -243,6 +243,19 @@ Renderer.prototype.rerender = function (view) {
   renderNode.ownerNode.emberView.scheduleRevalidate(renderNode, view.toString(), 'rerendering');
 };
 
+class ViewBounds {
+  constructor(view) {
+    this.view = view;
+  }
+  parentElement() { return this.view._renderNode.firstNode.parentNode; }
+  firstNode() { return this.view._renderNode.firstNode; }
+  lastNode() { return this.view._renderNode.lastNode; }
+}
+
+Renderer.prototype.bounds = function (view) {
+  return new ViewBounds(view);
+}
+
 Renderer.prototype.remove = function (view, shouldDestroy) {
   this.willDestroyElement(view);
 
