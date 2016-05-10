@@ -3,7 +3,6 @@
 @submodule ember-views
 */
 import { Mixin } from 'ember-metal/mixin';
-import { get } from 'ember-metal/property_get';
 
 /**
   @class InstrumentationSupport
@@ -20,12 +19,7 @@ var InstrumentationSupport = Mixin.create({
   */
   instrumentDisplay: '',
 
-  instrumentName: 'view',
-
-  instrumentDetails(hash) {
-    hash.template = get(this, 'templateName');
-    this._super(hash);
-  }
+  instrumentName: 'view'
 });
 
 export default InstrumentationSupport;

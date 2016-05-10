@@ -164,10 +164,21 @@ ViewNodeManager.prototype.destroy = function ViewNodeManager_destroy() {
 };
 
 function getTemplate(componentOrView) {
-  if (!componentOrView.isComponent) {
-    return get(componentOrView, 'template');
+  if (componentOrView.isComponent) {
+    return null;
   }
-
+  if (componentOrView.template) {
+    return componentOrView.template;
+  }
+  if (componentOrView.templateName) {
+    return componentOrView.templateForName(componentOrView.templateName);
+  }
+  if (componentOrView.defaultTemplate) {
+    return componentOrView.defaultTemplate;
+  }
+  if (componentOrView.defaultTemplateName) {
+    return componentOrView.templateForName(componentOrView.defaultTemplateName);
+  }
   return null;
 }
 

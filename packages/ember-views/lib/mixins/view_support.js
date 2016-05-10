@@ -6,6 +6,8 @@ import { guidFor } from 'ember-metal/utils';
 import { Mixin } from 'ember-metal/mixin';
 import { POST_INIT } from 'ember-runtime/system/core_object';
 import symbol from 'ember-metal/symbol';
+import { getOwner } from 'container/owner';
+import EmberError from 'ember-metal/error';
 
 const INIT_WAS_CALLED = symbol('INIT_WAS_CALLED');
 
@@ -72,20 +74,20 @@ export default Mixin.create({
   //   }
   // }),
 
-  // templateForName(name, type) {
-  //   if (!name) { return; }
-  //   assert('templateNames are not allowed to contain periods: ' + name, name.indexOf('.') === -1);
+  templateForName(name, type) {
+    if (!name) { return; }
+    assert('templateNames are not allowed to contain periods: ' + name, name.indexOf('.') === -1);
 
-  //   let owner = getOwner(this);
+    let owner = getOwner(this);
 
-  //   if (!owner) {
-  //     throw new EmberError('Container was not found when looking up a views template. ' +
-  //                'This is most likely due to manually instantiating an Ember.View. ' +
-  //                'See: http://git.io/EKPpnA');
-  //   }
+    if (!owner) {
+      throw new EmberError('Container was not found when looking up a views template. ' +
+                 'This is most likely due to manually instantiating an Ember.View. ' +
+                 'See: http://git.io/EKPpnA');
+    }
 
-  //   return owner.lookup('template:' + name);
-  // },
+    return owner.lookup('template:' + name);
+  },
 
   /**
     Return the nearest ancestor that is an instance of the provided
